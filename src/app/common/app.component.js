@@ -9,7 +9,7 @@ angular
   .config(function ($stateProvider) {
     $stateProvider
       .state('app', {
-        //redirectTo: 'contacts'
+        redirectTo: 'app.contacts',
         url: '/app',
         component: 'app',
         data: {
