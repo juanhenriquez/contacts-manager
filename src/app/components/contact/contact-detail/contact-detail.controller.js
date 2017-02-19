@@ -18,6 +18,10 @@ function ContactDetailController () {
       $event: { contact: ctrl.contact }
     });
   };
+  ctrl.tagChange = function (event) {
+    ctrl.contact.tag = event.tag;
+    ctrl.updateContact();
+  }
 }
 
 angular
