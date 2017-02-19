@@ -5,16 +5,41 @@ function AuthService($firebaseAuth) {
     authData = response;
     return authData;
   }
-  this.register = function (user) {
-   return auth
-    .$createUserWithEmailAndPassword(user.email, user.password)
-    .then(storeAuthData);
-  };
+  function onSignIn(user) {
+    authData = user;
+    return auth.$requireSignIn();
+  }
+  function clearAuthData() {
+    authData = null;
+  }
   this.login = function (user) {
     return auth
       .$signInWithEmailAndPassword(user.email, user.password)
       .then(storeAuthData);
   };
+  this.register = function (user) {
+   return auth
+    .$createUserWithEmailAndPassword(user.email, user.password)
+    .then(storeAuthData);
+  };
+  this.logout = function () {
+    return auth
+      .$signOut()
+      .then(clearAuthData);
+  };
+  this.requireAuthentication = function () {
+    return auth
+      .$waitForSignIn()
+      .then(onSignIn);
+  }
+  this.isAuthenticated = function () {
+    return !!authData; // null || {user}
+  }
+  this.getUser = function () {
+    if (authData) {
+      return authData;
+    }
+  }
 }
 
 angular

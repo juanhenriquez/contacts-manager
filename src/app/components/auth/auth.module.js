@@ -19,4 +19,25 @@ angular
       });
 
     firebase.initializeApp(config);
+  })
+  .run(function ($transitions, $state, AuthService) {
+    $transitions.onStart({
+      to: function (state) {
+        return !!(state.data && state.data.requiredAuth);
+      }
+    }, function() {
+      return AuthService
+        .requireAuthentication()
+        .catch(function (reason) {
+          return $state.target('auth.login');
+        });
+    });
+    $transitions.onStart({
+      to: 'auth.*'
+    }, function () {
+      console.log(AuthService.isAuthenticated());
+      if (AuthService.isAuthenticated()) {
+        return $state.target('app');
+      }
+    });
   });
